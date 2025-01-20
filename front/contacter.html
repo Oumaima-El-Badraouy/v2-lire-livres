@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contactez-Nous</title>
+    <link rel="stylesheet" href="styleh.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: 'Courier New', Courier, Prestige, monospace;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* Header */
+        .contact-header {
+            background-color: #8B4513;
+            color: white;
+            text-align: center;
+            padding: 0px 0;
+        }
+
+        .contact-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .contact-header p {
+            font-size: 1.1rem;
+        }
+
+        /* Main Content */
+        .contact-main {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .contact-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+        }
+
+        .contact-form,
+        .contact-info {
+            width: 48%;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form h2,
+        .contact-info h2 {
+            color: #8B4513;
+        }
+
+        .contact-form .input-group {
+            margin-bottom: 20px;
+        }
+
+        .contact-form label {
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .contact-form button {
+            background-color: #8B4513;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .contact-form button:hover {
+            background-color: #8B4513;
+        }
+
+        /* Information de contact */
+        .contact-info i {
+            color: #8B4513;
+            margin-right: 10px;
+        }
+
+        .contact-info p {
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+
+        .social-media a {
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .social-media a:hover {
+            color: #8B4513;
+        }
+
+        footer {
+            background-color: #8B4513;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: absolute;
+            width: 100%;
+            
+        }
+
+    </style>
+</head>
+<body>
+    
+    <header class="contact-header">
+        <h1>Contactez-Nous</h1>
+        <p>
+            Nous sommes là pour répondre à toutes vos questions ou préoccupations. 
+            N'hésitez pas à nous contacter !
+        </p>
+    </header>
+
+    <main class="contact-main">
+        <div class="contact-container">
+            <!-- Formulaire -->
+            <div class="contact-form">
+                <h2>Envoyez-nous un message</h2>
+                <form id="contactForm" method="post">
+                    <div class="input-group">
+                        <label for="name">Nom complet :</label>
+                        <input type="text" id="name" name="name" placeholder="Entrez votre nom complet" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email :</label>
+                        <input type="email" id="email" name="email" placeholder="Entrez votre email" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="subject">Sujet :</label>
+                        <input type="text" id="subject" name="subject" placeholder="Entrez le sujet de votre message" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="message">Message :</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Écrivez votre message ici" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Envoyer</button>
+                    <p id="responseMessage" style="margin-top: 1rem; font-weight: bold;"></p>
+                </form>
+            </div>
+
+            <!-- Informations de contact -->
+            <div class="contact-info">
+                <h2>Informations de contact</h2>
+                <p><i class="fa-solid fa-location-dot"></i> <strong>Adresse :</strong> 123 Rue de la Lecture, Casablanca, Mediouna</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>Téléphone :</strong> +33 1 23 45 67 89</p>
+                <p><i class="fa-solid fa-envelope"></i> <strong>Email :</strong> israouma@bookstore.com</p>
+
+                <h3>Suivez-nous :</h3>
+                <div class="social-media">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+    
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const subject = document.getElementById("subject").value.trim();
+            const message = document.getElementById("message").value.trim();
+        
+            try {
+                const response = await fetch("http://localhost:3000/api/contact", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ name, email, subject, message }),
+                });
+        
+                if (!response.ok) {
+                    throw new Error("Une erreur réseau s'est produite.");
+                }
+        
+                const result = await response.json();
+        
+                if (result.success) {
+                    alert("Votre message a été envoyé avec succès !");
+                    window.location.href = '/books/front/home.html'; 
+                    document.getElementById("contactForm").reset(); // Réinitialiser le formulaire
+                } else {
+                    alert(result.message || "Une erreur est survenue.");
+                }
+            } catch (error) {
+                console.error("Erreur :", error);
+                alert("Impossible d'envoyer le message. Veuillez réessayer.");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "@google-cloud/text-to-speech": "^5.7.0",
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "cookie-session": "^2.1.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "fs": "^0.0.1-security",
+    "google-auth-library": "^9.15.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.3",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.11.5",
+    "nodemailer": "^6.9.16",
+    "passport": "^0.7.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0",
+    "pdfkit": "^0.15.2",
+    "util": "^0.12.5"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17"
+  }
+}

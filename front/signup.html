@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-orange-100 flex justify-center items-center h-screen text-center">
+    <div class="bg-white/80 p-8 border border-gray-300 rounded-lg shadow-lg max-w-md w-full">
+        <!-- Header -->
+        <div class="flex items-center justify-center mb-6">
+            <img src="image/logoo.png" alt="Logo" class="w-8 mr-3">
+            <h2 class="text-2xl font-semibold text-gray-800">Inscrivez-vous</h2>
+        </div>
+        
+        <!-- Formulaire -->
+        <form id="signup-form" class="space-y-4">
+            <div class="flex flex-col text-left">
+                <label for="username" class="text-sm font-medium">Nom d'utilisateur :</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                    placeholder="Entrez votre nom d'utilisateur" 
+                    required>
+            </div>
+
+            <div class="flex flex-col text-left">
+                <label for="email" class="text-sm font-medium">Email :</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                    placeholder="Entrez votre email" 
+                    required>
+            </div>
+
+            <div class="flex flex-col text-left">
+                <label for="password" class="text-sm font-medium">Mot de passe :</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                    placeholder="Créez un mot de passe" 
+                    required>
+            </div>
+
+            <div class="flex flex-col text-left">
+                <label for="confirm_password" class="text-sm font-medium">Confirmez le mot de passe :</label>
+                <input 
+                    type="password" 
+                    id="confirm_password" 
+                    name="confirm_password" 
+                    class="mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                    placeholder="Confirmez votre mot de passe" 
+                    required>
+            </div>
+
+            <button type="submit" class="w-full py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition duration-200">
+                S'inscrire
+            </button>
+
+            <p class="text-sm text-gray-700 mt-3">
+                Déjà un compte ? <a href="connexion.html" class="text-orange-600 hover:underline font-semibold">Se connecter</a>
+            </p>
+        </form>
+
+        <!-- Footer -->
+        <footer class="mt-6 text-xs text-gray-500">
+            © 2025 MonSite. Tous droits réservés.
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById("signup-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+        
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm_password").value;
+        
+            console.log("Données envoyées au serveur :", { username, email, password, confirmPassword });
+        
+            try {
+                const response = await fetch("http://localhost:3000/signup", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username, email, password, confirm_password: confirmPassword })
+                });
+        
+                const result = await response.json();
+        
+                console.log("Réponse du serveur :", result);
+        
+                if (result.success) {
+                    window.location.href = `/books/public/index.html?id=${result.userId}`;
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error("Erreur dans le fetch :", error);
+                alert("Une erreur est survenue. Veuillez réessayer.");
+            }
+        });
+    </script>
+</body>
+</html>

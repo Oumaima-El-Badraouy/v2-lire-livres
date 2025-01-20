@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes Téléchargements</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Pour les icônes -->
+</head>
+<body class="bg-white text-gray-800 font-sans">
+
+  <!-- Navbar -->
+  <div class="navbar bg-transparent px-12 py-4 flex justify-between items-center sticky top-0 z-50">
+    <button onclick="window.history.back()" class="text-orange-600 text-2xl focus:outline-none">
+      <i class="fas fa-arrow-circle-left"></i> <!-- Flèche avec un cercle -->
+    </button>
+  </div>
+  
+  <!-- Titre -->
+  <h1 class="text-3xl font-bold text-orange-800 text-center uppercase mt-6 tracking-wide">
+    <img src="images/logoo.png" alt="Logo" class="inline-block w-12 mr-2"> Téléchargements
+  </h1>
+
+  <!-- Conteneur des téléchargements -->
+  <div id="downloads" class="downloads-container grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap- 9 p-4"></div>
+
+  <script>
+    // Fonction pour extraire l'ID utilisateur depuis l'URL
+    function getUserIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id'); // Extrait la valeur de "id" dans l'URL
+    }
+
+    // Fonction pour charger les téléchargements
+    function loadDownloads() {
+      const userId = getUserIdFromUrl();
+      if (!userId) {
+        document.getElementById('downloads').innerText = "ID utilisateur manquant dans l'URL.";
+        return;
+      }
+
+      // Requête GET pour récupérer les téléchargements
+      fetch(`http://localhost:3000/downloads/${userId}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Erreur lors de la récupération des téléchargements.");
+          }
+          return response.json();
+        })
+        .then(data => {
+          const downloadsContainer = document.getElementById('downloads');
+          downloadsContainer.innerHTML = ""; // Nettoyer le conteneur
+
+          if (data.length === 0) {
+            downloadsContainer.innerText = "Aucun téléchargement trouvé.";
+            return;
+          }
+
+          // Ajouter chaque téléchargement au conteneur
+          data.forEach(download => {
+            const downloadDiv = document.createElement('div');
+            downloadDiv.className = "download-card bg-white border border-gray-300 rounded-lg shadow-md p-3 text-center transition transform hover:scale-105 hover:shadow-lg max-w-xs mx-auto";
+            downloadDiv.innerHTML = `
+              <img src="${download.image}" alt="${download.titre}" class="w-full h-40 object-cover rounded-lg mb-2">
+              <h3 class="text-base font-semibold text-orange-800">${download.titre}</h3>
+              <p class="text-sm text-gray-600">Auteur : ${download.author}</p>
+              <p class="text-xs text-gray-500 mt-1">Téléchargé le : ${new Date(download.download_time).toLocaleString()}</p>
+              <button onclick="window.location.href='read.html?id=${userId}'" class="mt-3 px-3 py-1 bg-orange-600 text-white text-sm rounded hover:bg-orange-700 transition">
+                Lire
+              </button>
+            `;
+            downloadsContainer.appendChild(downloadDiv);
+          });
+        })
+        .catch(error => {
+          console.error(error);
+          document.getElementById('downloads').innerText = "Une erreur s'est produite.";
+        });
+    }
+
+    // Charger les téléchargements au chargement de la page
+    window.onload = loadDownloads;
+  </script>
+</body>
+</html>

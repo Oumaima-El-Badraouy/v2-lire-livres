@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion avec Google</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <h2>Connexion avec Google</h2>
+    
+    <!-- Google Sign-In Button -->
+    <div id="g_id_onload"
+         data-client_id="69774506460-r0ddmdumgu9d8k41l444340igd1d6u7e.apps.googleusercontent.com"
+         data-login_uri="https://www.masuperapp.com">
+    </div>
+
+    <div class="g_id_signin" data-type="standard"></div>
+
+    <script>
+        function handleCredentialResponse(response) {
+            const id_token = response.credential;
+
+            // Envoie le token ID à votre serveur pour l'authentification
+            fetch('/auth/google', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id_token })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Connexion réussie!");
+                    // Rediriger vers une page sécurisée après la connexion
+                } else {
+                    alert("Erreur de connexion");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

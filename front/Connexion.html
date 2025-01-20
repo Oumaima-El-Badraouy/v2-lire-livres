@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Image d'arrière-plan avec overlay sombre */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color:rgb(175, 161, 146);
+            background-size: cover;
+            opacity: 0.5; /* Ajuste l'opacité de l'image */
+            z-index: -2; /* Assurez-vous que l'overlay est derrière le contenu */
+        }
+
+
+      
+
+     
+
+        /* Container de connexion */
+        .login-container {
+
+            background: rgba(255, 255, 255, 0.799); /* Formulaire transparent */
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(8px); /* Effet de flou en arrière-plan */
+            border: #000000 2px;
+           
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 5px;
+            color: #1613139c;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            margin-top: 5px;
+            background-color: rgba(255, 255, 255, 0.3); /* Fond semi-transparent */
+            color: #1613139c;
+            transition: background-color 0.3s ease;
+        }
+
+        input:focus {
+            background-color: rgba(255, 255, 255, 0.6);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            background-color: #3e64ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #6e7dff;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-top: 20px;
+            color:  #1613139c;
+        }
+
+        a {
+            color: #1613139c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #6e7dff;
+        }
+
+        /* Effet d'animation */
+        .login-container {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #000000;
+        }
+
+    </style>
+</head>
+<body>
+
+      
+        
+   
+
+    <main>
+        <section class="login-container">
+        <h1><img src="image/logoo.png" alt="Logo de la page" style="width: 30px;"/>            Connexion </h1>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" name="email" placeholder="Entrez votre email" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                </div>
+
+                <button type="submit">Se connecter</button>
+                <p>Pas encore inscrit ? <a href="signup.html">Créer un compte</a></p>
+                <div class="forgot-password">
+                    <a href="#" id="forgot-password">Mot de passe oublié ?</a>
+                </div>
+            </form>
+           
+        
+            <div id="error-message" style="color: red; display: none;"></div> <!-- Zone d'affichage des erreurs -->
+        </section>
+    </main>
+
+    <script>
+        document.getElementById("login-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+        
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+        
+            try {
+                const response = await fetch("http://localhost:3000/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+        
+                const result = await response.json();
+        
+                if (result.success && result.userId) {
+                    console.log("ID utilisateur récupéré :", result.userId);
+                    window.location.href = `/books/public/index.html?id=${result.userId}`;
+                } else {
+                    console.error("Erreur : ID utilisateur manquant dans la réponse.");
+                    alert(result.message || "Erreur inconnue.");
+                }
+            } catch (error) {
+                console.error("Erreur réseau ou serveur :", error);
+                alert("Une erreur est survenue. Veuillez réessayer.");
+            }
+        });
+        // app.js
+document.getElementById('forgot-password').addEventListener('click', function (e) {
+    e.preventDefault();
+    document.getElementById('forgot-password-modal').style.display = 'flex';
+});
+
+document.getElementById('close-modal').addEventListener('click', function () {
+    document.getElementById('forgot-password-modal').style.display = 'none';
+});
+
+document.getElementById('send-reset-link').addEventListener('click', function () {
+    const email = document.getElementById('forgot-email').value;
+    if (email) {
+        fetch('/reset-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Un lien de réinitialisation a été envoyé à votre adresse email.');
+                document.getElementById('forgot-password-modal').style.display = 'none';
+            } else {
+                alert('Erreur lors de l\'envoi du lien.');
+            }
+        });
+    } else {
+        alert('Veuillez entrer votre email.');
+    }
+});
+
+    </script>
+
+    <footer>
+        <p>&copy; 2024 BookStore. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>

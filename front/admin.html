@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>/* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        /* Section Styles */
+        section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #333;
+        }
+        
+        #books-list, #reviews-list, #contact-messages-list, #users-list {
+            margin-top: 20px;
+        }
+        
+        /* Table-like Layout for Lists */
+        div > h3, div > p {
+            margin: 5px 0;
+        }
+        
+        div {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        div button {
+            background-color: #f44336;
+            margin-left: 10px;
+        }
+        
+        div button:hover {
+            background-color: #d32f2f;
+        }
+        
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        
+        input, textarea {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+        }
+        
+        textarea {
+            height: 100px;
+        }
+        
+        form button {
+            width: 150px;
+            align-self: flex-start;
+        }
+        
+        #add-book-form, #add-review-form, #add-user-form {
+            background-color: #fafafa;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        #add-book-form h3, #add-review-form h3, #add-user-form h3 {
+            margin-bottom: 15px;
+        }
+        </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Panel</h1>
+
+        <!-- Books Section -->
+        <section id="books">
+            <h2>Books Management</h2>
+            <div id="books-list"></div>
+            <button onclick="showAddBookForm()">Add Book</button>
+        </section>
+
+        <!-- Reviews Section -->
+        <section id="reviews">
+            <h2>Reviews Management</h2>
+            <div id="reviews-list"></div>
+            <button onclick="showAddReviewForm()">Add Review</button>
+        </section>
+
+        <!-- Contact Messages Section -->
+        <section id="contact-messages">
+            <h2>Contact Messages</h2>
+            <div id="contact-messages-list"></div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="users">
+            <h2>Users Management</h2>
+            <div id="users-list"></div>
+        </section>
+    </div>
+
+    <!-- Add Book Form -->
+    <div id="add-book-form" style="display: none;">
+        <h3>Add a New Book</h3>
+        <input type="text" id="book-title" placeholder="Title" required>
+        <textarea id="book-description" placeholder="Description" required></textarea>
+        <input type="text" id="book-image" placeholder="Image URL" required>
+        <textarea id="book-content" placeholder="Content" required></textarea>
+        <input type="text" id="book-author" placeholder="Author" required>
+        <input type="text" id="book-category" placeholder="Category" required>
+        <button onclick="addBook()">Submit</button>
+        <button onclick="closeAddBookForm()">Cancel</button>
+    </div>
+
+    <!-- Add Review Form -->
+    <div id="add-review-form" style="display: none;">
+        <h3>Add a New Review</h3>
+        <input type="number" id="review-book-id" placeholder="Book ID" required>
+        <input type="number" id="review-rating" placeholder="Rating (1-5)" required>
+        <textarea id="review-text" placeholder="Review Text" required></textarea>
+        <input type="number" id="review-likes" placeholder="Likes" required>
+        <input type="number" id="review-dislikes" placeholder="Dislikes" required>
+        <button onclick="addReview()">Submit</button>
+        <button onclick="closeAddReviewForm()">Cancel</button>
+    </div>
+
+    <!-- Add User Form -->
+    <div id="add-user-form" style="display: none;">
+        <h3>Add a New User</h3>
+        <input type="text" id="user-username" placeholder="Username" required>
+        <input type="email" id="user-email" placeholder="Email" required>
+        <input type="password" id="user-password" placeholder="Password" required>
+        <button onclick="addUser()">Submit</button>
+        <button onclick="closeAddUserForm()">Cancel</button>
+    </div>
+
+    <script>
+        
+        const apiUrl = "http:/localhost:3000/api/";
+
+        // Fetch and display books
+        async function fetchBooks() {
+            const response = await fetch(apiUrl + "books");
+            const books = await response.json();
+            const booksList = document.getElementById("books-list");
+            booksList.innerHTML = books.map(book => `
+                <div>
+                    <h3>${book.titre}</h3>
+                    <p>${book.description}</p>
+                    <button onclick="deleteBook(${book.id})">Delete</button>
+                    <button onclick="editBook(${book.id})">Edit</button>
+                </div>
+            `).join("");
+        }
+
+        // Add a new book
+        async function addBook() {
+            const bookData = {
+                titre: document.getElementById("book-title").value,
+                description: document.getElementById("book-description").value,
+                image: document.getElementById("book-image").value,
+                content: document.getElementById("book-content").value,
+                author: document.getElementById("book-author").value,
+                category: document.getElementById("book-category").value,
+            };
+            const response = await fetch(apiUrl + "books", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(bookData),
+            });
+            const result = await response.json();
+            alert("Book added successfully!");
+            closeAddBookForm();
+            fetchBooks();
+        }
+
+        // Delete a book
+        async function deleteBook(id) {
+            await fetch(apiUrl + "books/" + id, {
+                method: "DELETE",
+            });
+            fetchBooks();
+        }
+
+        // Show the Add Book form
+        function showAddBookForm() {
+            document.getElementById("add-book-form").style.display = "block";
+        }
+
+        // Close the Add Book form
+        function closeAddBookForm() {
+            document.getElementById("add-book-form").style.display = "none";
+        }
+        const apiUrl1 = "http://localhost:3000//api";
+        // Fetch and display reviews
+        async function fetchReviews() {
+            const response = await fetch(apiUrl1 + "reviews");
+            const reviews = await response.json();
+            const reviewsList = document.getElementById("reviews-list");
+            reviewsList.innerHTML = reviews.map(review => `
+                <div>
+                    <p>Book ID: ${review.book_id}, Rating: ${review.rating}</p>
+                    <p>${review.review}</p>
+                    <button onclick="deleteReview(${review.id})">Delete</button>
+                    <button onclick="editReview(${review.id})">Edit</button>
+                </div>
+            `).join("");
+        }
+
+        // Add a new review
+        async function addReview() {
+            const reviewData = {
+                book_id: document.getElementById("review-book-id").value,
+                rating: document.getElementById("review-rating").value,
+                review: document.getElementById("review-text").value,
+                likes: document.getElementById("review-likes").value,
+                dislikes: document.getElementById("review-dislikes").value,
+            };
+            const response = await fetch(apiUrl1 + "reviews", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(reviewData),
+            });
+            const result = await response.json();
+            alert("Review added successfully!");
+            closeAddReviewForm();
+            fetchReviews();
+        }
+
+        // Delete a review
+        async function deleteReview(id) {
+            await fetch(apiUrl1 + "reviews/" + id, {
+                method: "DELETE",
+            });
+            fetchReviews();
+        }
+
+        // Show the Add Review form
+        function showAddReviewForm() {
+            document.getElementById("add-review-form").style.display = "block";
+        }
+
+        // Close the Add Review form
+        function closeAddReviewForm() {
+            document.getElementById("add-review-form").style.display = "none";
+        }
+
+        // Fetch and display contact messages
+        async function fetchContactMessages() {
+            const response = await fetch(apiUrl1 + "contact_messages");
+            const messages = await response.json();
+            const messagesList = document.getElementById("contact-messages-list");
+            messagesList.innerHTML = messages.map(message => `
+                <div>
+                    <p><strong>${message.full_name}</strong> (${message.email})</p>
+                    <p>${message.subject}: ${message.message}</p>
+                    <button onclick="deleteContactMessage(${message.id})">Delete</button>
+                </div>
+            `).join("");
+        }
+
+        // Delete a contact message
+        async function deleteContactMessage(id) {
+            await fetch(apiUrl + "contact_messages/" + id, {
+                method: "DELETE",
+            });
+            fetchContactMessages();
+        }
+        const apiUrl3 = "http://localhost:3000/";
+        // Fetch and display users
+        async function fetchUsers() {
+            const response = await fetch(apiUrl3 + "users");
+            const users = await response.json();
+            const usersList = document.getElementById("users-list");
+            usersList.innerHTML = users.map(user => `
+                <div>
+                    <p>Username: ${user.username} (${user.email})</p>
+                    <button onclick="deleteUser(${user.user_id})">Delete</button>
+                </div>
+            `).join("");
+        }
+
+        // Delete a user
+        async function deleteUser(id) {
+            await fetch(apiUrl3 + "users/" + id, {
+                method: "DELETE",
+            });
+            fetchUsers();
+        }
+
+        // Add a new user
+        async function addUser() {
+            const userData = {
+                username: document.getElementById("user-username").value,
+                email: document.getElementById("user-email").value,
+                password: document.getElementById("user-password").value,
+            };
+            const response = await fetch(apiUrl + "users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(userData),
+            });
+            const result = await response.json();
+            alert("User added successfully!");
+            closeAddUserForm();
+            fetchUsers();
+        }
+
+        // Show the Add User form
+        function showAddUserForm() {
+            document.getElementById("add-user-form").style.display = "block";
+        }
+
+        // Close the Add User form
+        function closeAddUserForm() {
+            document.getElementById("add-user-form").style.display = "none";
+        }
+
+        // Initial fetch for all sections
+        fetchBooks();
+        fetchReviews();
+        fetchContactMessages();
+        fetchUsers();
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Processed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="payment-processed-container">
+        <h1>Payment Processed</h1>
+        <div class="payment-summary">
+            <h2>Plan: <span id="plan-summary"></span></h2>
+            <p>Cardholder Name: <span id="cardholder-summary"></span></p>
+            <p>Card Number: **** **** **** <span id="card-number-summary"></span></p>
+            <p>Amount: <span id="amount-summary"></span></p>
+        </div>
+
+        <a href="index.html" class="back-to-home">Back to Home</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const plan = urlParams.get('plan');
+            const cardName = urlParams.get('card-name');
+            const cardNumber = urlParams.get('card-number');
+            const amount = document.querySelector('#payment-plan-price').textContent;
+
+            document.getElementById('plan-summary').textContent = plan;
+            document.getElementById('cardholder-summary').textContent = cardName;
+            document.getElementById('card-number-summary').textContent = cardNumber.slice(-4);
+            document.getElementById('amount-summary').textContent = amount;
+        });
+    </script>
+</body>
+</html>

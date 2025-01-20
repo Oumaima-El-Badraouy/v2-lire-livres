@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "title": "History of the World",
+      "description": "The complete history of the world in chapters.",
+      "content": "Chapter 1: Introduction to the World...\nChapter 2: Ancient Civilizations...\nChapter 3: The Rise of Empires...",
+      "image": "images/image1.jpeg"
+    },
+    {
+      "id": 2,
+      "title": "World War I",
+      "description": "The first global conflict...",
+      "content": "The war started in 1914... The countries involved were Europe, Germany, Britain...",
+      "image": "images/image2.jpeg"
+    },
+    {
+      "id": 3,
+      "title": "Ancient Egypt",
+      "description": "The story of the Egyptian civilization...",
+      "content": "Ancient Egypt flourished along the Nile River, with the construction of pyramids...",
+      "image": "images/image3.jpeg"
+    }
+  ]
+  

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Livres</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .add-button {
+            background-color: blue;
+            color: white;
+        }
+        .delete {
+            background-color: red;
+            color: white;
+        }
+        .edit {
+            background-color: orange;
+            color: white;
+        }
+        #edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        #edit-modal div {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 400px;
+        }
+        input, textarea {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #add-book-form-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gestion des Livres</h1>
+    
+    <!-- Button to add new book -->
+    <button class="add-button" onclick="toggleAddBookForm()">Ajouter un Livre</button>
+
+    <!-- Form to add a new book -->
+    <div id="add-book-form-container" class="form-container">
+        <h3>Ajouter un Livre</h3>
+        <form id="add-book-form">
+            <label for="titre">Titre:</label>
+            <input type="text" id="titre" required>
+            <label for="description">Description:</label>
+            <textarea id="description" required></textarea>
+            <label for="content">Contenu:</label>
+            <textarea id="content" required></textarea>
+            <label for="image">Image:</label>
+            <input type="text" id="image">
+            <label for="author">Auteur:</label>
+            <input type="text" id="author" required>
+            <button type="submit">Ajouter</button>
+            <button type="button" onclick="toggleAddBookForm()">Annuler</button>
+        </form>
+    </div>
+
+    <!-- Modal to edit a book -->
+    <div id="edit-modal">
+        <div>
+            <h3>Modifier le Livre</h3>
+            <form id="edit-book-form">
+                <label for="edit-titre">Titre:</label>
+                <input type="text" id="edit-titre" required>
+                <label for="edit-description">Description:</label>
+                <textarea id="edit-description" required></textarea>
+                <label for="edit-content">Contenu:</label>
+                <textarea id="edit-content" required></textarea>
+                <label for="edit-image">Image:</label>
+                <input type="text" id="edit-image">
+                <label for="edit-author">Auteur:</label>
+                <input type="text" id="edit-author" required>
+                <button type="submit">Modifier</button>
+                <button type="button" onclick="closeEditModal()">Annuler</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table to display books -->
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Auteur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="book-table">
+            <!-- Book rows will go here -->
+        </tbody>
+    </table>
+    <h1>Gestion des Reviews et Utilisateurs</h1>
+
+    <!-- Ajouter Review -->
+    <button class="add-button" onclick="toggleAddReviewForm()">Ajouter une Review</button>
+    <div id="add-review-form-container" class="form-container" style="display:none;">
+        <h3>Ajouter une Review</h3>
+        <form id="add-review-form">
+            <label for="review-text">Review:</label>
+            <textarea id="review-text" required></textarea>
+            <label for="book-id">Livre ID:</label>
+            <input type="number" id="book-id" required>
+            <button type="submit">Ajouter</button>
+            <button type="button" onclick="toggleAddReviewForm()">Annuler</button>
+        </form>
+    </div>
+
+   
+    <h2>Liste des Reviews</h2>
+    <table id="review-table">
+        <thead>
+            <tr>
+                <th>Review</th>
+                <th>Livre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h1>Gestion des utilisateurs</h1>
+  <form id="user-form">
+    <input type="hidden" id="user-id" />
+    <label>
+      Email: <input type="email" id="email" required />
+    </label>
+    <label>
+      Nom: <input type="text" id="nom" required />
+    </label>
+    <label>
+      Prénom: <input type="text" id="prenom" required />
+    </label>
+    <label>
+      Mot de passe: <input type="password" id="motdepasse" required />
+    </label>
+    <button type="submit">Enregistrer</button>
+  </form>
+  <h2>Liste des utilisateurs</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="user-list">
+    </tbody>
+  </table>
+
+ 
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        const apiUrl = 'http://localhost:3000/users'; // Lien vers ton backend
+const userForm = document.getElementById('user-form');
+const userList = document.getElementById('user-list');
+
+// Charger les utilisateurs
+async function loadUsers() {
+  const response = await fetch(apiUrl);
+  const users = await response.json();
+  userList.innerHTML = users
+    .map(
+      user => `
+      <tr>
+        <td>${user.id}</td>
+        <td>${user.email}</td>
+        <td>${user.nom}</td>
+        <td>${user.prenom}</td>
+        <td>
+          <button onclick="editUser(${user.id}, '${user.email}', '${user.nom}', '${user.prenom}')">Modifier</button>
+          <button onclick="deleteUser(${user.id})">Supprimer</button>
+        </td>
+      </tr>
+    `
+    )
+    .join('');
+}
+
+// Ajouter ou mettre à jour un utilisateur
+userForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = document.getElementById('user-id').value;
+  const email = document.getElementById('email').value;
+  const nom = document.getElementById('nom').value;
+  const prenom = document.getElementById('prenom').value;
+  const motdepasse = document.getElementById('motdepasse').value;
+
+  const method = id ? 'PUT' : 'POST';
+  const url = id ? `${apiUrl}/${id}` : apiUrl;
+  const body = JSON.stringify({ email, nom, prenom, motdepasse });
+
+  await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body,
+  });
+
+  userForm.reset();
+  loadUsers();
+});
+
+// Modifier un utilisateur (pré-remplir le formulaire)
+function editUser(id, email, nom, prenom) {
+  document.getElementById('user-id').value = id;
+  document.getElementById('email').value = email;
+  document.getElementById('nom').value = nom;
+  document.getElementById('prenom').value = prenom;
+}
+
+// Supprimer un utilisateur
+async function deleteUser(id) {
+  if (confirm('Voulez-vous vraiment supprimer cet utilisateur ?')) {
+    await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+    loadUsers();
+  }
+}
+
+// Charger les utilisateurs au démarrage
+loadUsers();
+
+        const apiUrlReviews = 'http://localhost:3000/reviews';
+      
+
+        function fetchReviews() {
+            fetch(apiUrlReviews)
+                .then(response => response.json())
+                .then(reviews => {
+                    const reviewTableBody = document.querySelector('#review-table tbody');
+                    reviewTableBody.innerHTML = '';
+                    reviews.forEach(review => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${review.text}</td>
+                            <td>${review.book_id}</td>
+                            <td>
+                                <button class="delete" onclick="deleteReview(${review.id})">Supprimer</button>
+                            </td>
+                        `;
+                        reviewTableBody.appendChild(row);
+                    });
+                });
+        }
+
+        function toggleAddReviewForm() {
+            const formContainer = document.getElementById('add-review-form-container');
+            formContainer.style.display = formContainer.style.display === 'block' ? 'none' : 'block';
+        }
+
+       
+        document.getElementById('add-review-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const newReview = {
+                text: document.getElementById('review-text').value,
+                book_id: document.getElementById('book-id').value
+            };
+
+            fetch(apiUrlReviews, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newReview)
+            })
+            .then(() => fetchReviews())
+            .then(() => toggleAddReviewForm())
+            .catch(err => console.error('Erreur lors de l\'ajout de la review:', err));
+        });
+
+       
+         
+
+        function deleteReview(reviewId) {
+            fetch(`${apiUrlReviews}/${reviewId}`, { method: 'DELETE' })
+                .then(() => fetchReviews())
+                .catch(err => console.error('Erreur lors de la suppression de la review:', err));
+        }
+
+        function deleteUser(userId) {
+            fetch(`${apiUrlUsers}/${userId}`, { method: 'DELETE' })
+                .then(() => fetchUsers())
+                .catch(err => console.error('Erreur lors de la suppression de l\'utilisateur:', err));
+        }
+
+        // Charger les données au démarrage de la page
+        window.onload = function() {
+            fetchReviews();
+            fetchUsers();
+        };
+   
+   
+        const apiUrlBooks = 'http://localhost:3000/stories';
+        let editingBookId = null;
+
+        // Fonction pour récupérer et afficher les livres
+        function fetchBooks() {
+            fetch(apiUrlBooks)
+                .then(response => response.json())
+                .then(books => {
+                    const bookTableBody = document.querySelector('#book-table');
+                    bookTableBody.innerHTML = '';  // Vider la table existante
+
+                    books.forEach(book => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${book.titre}</td>
+                            <td>${book.description}</td>
+                            <td>${book.author}</td>
+                            <td>
+                                <button class="edit" onclick="openEditModal(${book.id}, '${book.titre}', '${book.description}', '${book.content}', '${book.image}', '${book.author}')">Modifier</button>
+                                <button class="delete" onclick="deleteBook(${book.id})">Supprimer</button>
+                            </td>
+                        `;
+                        bookTableBody.appendChild(tr);
+                    });
+                })
+                .catch(err => console.error('Erreur lors de la récupération des livres:', err));
+        }
+
+        // Fonction pour ouvrir ou fermer le formulaire d'ajout
+        function toggleAddBookForm() {
+            const formContainer = document.getElementById('add-book-form-container');
+            formContainer.style.display = (formContainer.style.display === 'none' || formContainer.style.display === '') ? 'block' : 'none';
+        }
+
+        // Fonction pour soumettre l'ajout d'un livre
+        document.getElementById('add-book-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const newBook = {
+                titre: document.getElementById('titre').value,
+                description: document.getElementById('description').value,
+                content: document.getElementById('content').value,
+                image: document.getElementById('image').value,
+                author: document.getElementById('author').value,
+            };
+
+            fetch(apiUrlBooks, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newBook)
+            })
+            .then(() => {
+                fetchBooks();  // Reload books after adding
+                toggleAddBookForm();  // Close the form
+            })
+            .catch(err => console.error('Erreur lors de l\'ajout du livre:', err));
+        });
+
+        // Fonction pour supprimer un livre
+        function deleteBook(bookId) {
+            fetch(`${apiUrlBooks}/${bookId}`, { method: 'DELETE' })
+                .then(() => fetchBooks())  // Reload the books list
+                .catch(err => console.error('Erreur lors de la suppression du livre:', err));
+        }
+
+        // Fonction pour ouvrir le modal d'édition avec les données du livre
+        function openEditModal(id, titre, description, content, image, author) {
+            editingBookId = id;
+            document.getElementById('edit-titre').value = titre;
+            document.getElementById('edit-description').value = description;
+            document.getElementById('edit-content').value = content;
+            document.getElementById('edit-image').value = image;
+            document.getElementById('edit-author').value = author;
+            document.getElementById('edit-modal').style.display = 'flex';
+        }
+
+        // Fonction pour fermer le modal d'édition
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        // Fonction pour soumettre l'édition du livre
+        document.getElementById('edit-book-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const updatedBook = {
+                titre: document.getElementById('edit-titre').value,
+                description: document.getElementById('edit-description').value,
+                content: document.getElementById('edit-content').value,
+                image: document.getElementById('edit-image').value,
+                author: document.getElementById('edit-author').value,
+            };
+            
+            fetch(`${apiUrlBooks}/${editingBookId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedBook)
+            })
+            .then(() => {
+                fetchBooks();  // Reload books after update
+                closeEditModal();  // Close the modal
+            })
+            .catch(err => console.error('Erreur lors de la modification du livre:', err));
+        });            
+
+        // Charger les livres au chargement de la page
+        window.onload = fetchBooks;
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+</body>
+</html>

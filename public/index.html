@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste de Livres</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Pour les icônes -->
+    <style>
+        /* Styles généraux */
+        body {
+            font-family:'Playfair Display', serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('images/bg.png');
+            background-size: cover;
+            background-attachment: fixed;
+            color: #333;
+        }
+
+        /* Menu horizontal */
+        .navbar {
+            background-color: #fff;
+            color: rgb(44, 23, 23);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(197, 111, 30, 0.566);
+        }
+
+        .navbar .logo img {
+            height: 50px;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            margin-right: 10px;
+            font-size: 1em;
+        }
+
+        .navbar ul li a {
+            color: #8B4513;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        .navbar ul li a:hover {
+            color: rgba(134, 86, 39, 0.409);
+            
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar ul li a i {
+            margin-right: 8px;
+        }
+
+        /* Contenu principal */
+        .main-content {
+            padding: 10px;
+            text-align: center;
+            
+        
+            
+            margin-top: 10px;
+        }
+        
+        
+        /* Liste des livres */
+        #book-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .book {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.9);
+            border-radius: 12px;
+            width: calc(25% - 20px);
+            transition: transform 0.5s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .book:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .book img {
+            width: 120px;
+            height: 180px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .book-details {
+            text-align: center;
+            color: #444;
+        }
+
+        .book-details h3 {
+            margin: 10px 0;
+            font-size: 1.5em;
+            color: #8B4513;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .book:hover .book-details h3 {
+            color: #d86411;
+            transform: translateY(-5px);
+        }
+
+        .read-btn {
+            padding: 10px 20px;
+            background-color: #8B4513;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            display: inline-block;
+            text-align: center;
+            margin-top: 12px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .read-btn:hover {
+            background-color: #d86411;
+        }
+
+        /* Profil icon */
+        #profile-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #ff910077;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            margin-left: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        #profile-icon:hover {
+            background-color: #b35c00b3;
+        }
+
+        /* Infos utilisateur */
+        #user-info {
+            font-size: 1.2em;
+            color: #333;
+            margin-top: 20px;
+        }
+        /* Style du champ de recherche */
+.navbar input[type="text"] {
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 2px solid #8B4513;
+    width: 200px;
+    margin-right: 20px;
+}
+
+.navbar input[type="text"]:focus {
+    border-color: #d86411;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+footer{
+    width: 100%;
+    background: #aa652d96;
+   
+}
+
+footer .footer_main{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+footer .footer_main .tag{
+    margin: 10px 0;
+}
+
+footer .footer_main .tag img{
+    width:  30px;
+    margin-bottom: 10px;
+}
+
+footer .footer_main .tag p{
+    width: 250px;
+    line-height: 22px;
+    text-align: justify;
+}
+
+footer .footer_main .tag h1{
+    font-size: 25px;
+    margin: 25px 0;
+    color: #000;
+}
+
+footer .footer_main .tag a{
+    display: block;
+    color: black;
+    text-decoration: none;
+    margin: 10px 0;
+}
+
+footer .footer_main .tag i{
+    margin-right: 10px;
+}
+
+footer .footer_main .tag .social_link i{
+    margin: 0 5px;
+}
+
+footer .footer_main .tag .search_bar{
+    width: 230px;
+    height: 30px;
+    background: rgb(237, 236, 236);
+    border-radius: 25px;
+}
+
+footer .footer_main .tag .search_bar input{
+    width: 200px;
+    padding: 2px 0;
+    position: relative;
+    top: 17%;
+    left: 6%;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    background: none;
+}
+
+footer .footer_main .tag .search_bar button{
+    padding: 7px 15px;
+    background: #da8653;
+    border: none;
+    margin-top: 15px;
+    border-radius: 25px;
+    color: #fff;
+    cursor: pointer;
+}
+
+footer .end{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    color: #000;
+}
+
+footer .end span{
+    color: #8B4513;
+    margin-left: 10px;
+}
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Dancing+Script&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+</head>
+<body>
+
+    <!-- Menu horizontal -->
+   <!-- Barre de navigation -->
+<div class="navbar">
+    <div class="logo"><img src="images\logoo.png" alt="Logo"></div>
+    <ul>
+    
+        
+        
+        <li onclick="redirectToFavorites()"><a ><i class="fas fa-heart"></i>Favoris</a></li>
+        <li onclick="gotodown()"><a ><i class="fas fa-download"></i>Téléchargements</a></li>
+        <li><a href="/books/front/home.html" class="btn btn-danger">
+            <i class="bi bi-box-arrow-right"></i> Déconnexion
+        </a>
+        </li>
+        <li>
+            <!-- Champ de recherche -->
+            
+            <input type="text" id="searchInput" placeholder="Rechercher un livre ou un auteur..." oninput="searchBooks()"> 
+            
+           
+        </li>
+    <li><a href="/books/Real-Time-Chat-App-using-php-main/login.php" id="chat"><i class="bi bi-chat chat-icon"></i>Chat</a></li>
+        <li id="goToProfile">
+            <div id="profile-icon"><i class="fas fa-user"></i></div>
+        </li>
+
+    </ul>
+</div>
+
+
+
+  
+        
+        <div id="book-list"></div>
+    </div>
+
+
+    <script>
+       
+        fetch('http://localhost:3000/stories')
+        .then(response => response.json())
+        .then(data => {
+            const bookList = document.getElementById('book-list');
+            if (data.length > 0) {
+                data.forEach(book => {
+                    const bookDiv = document.createElement('div');
+                    bookDiv.className = 'book';
+                    bookDiv.innerHTML = `
+                        <img src="${book.image}" alt="Image du livre">
+                        <div class="book-details">
+                            <h3>${book.titre}</h3>
+                            <p>${book.description}</p>
+                        </div>
+                        <a class="read-btn" onclick="window.location.href='read.html?id=${book.id}&id1=${userId}'">Lire</a>
+                    `;
+                    bookList.appendChild(bookDiv);
+                });
+            } else {
+                bookList.innerHTML = '<p>Aucun livre trouvé.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des livres:', error);
+        });
+
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        const userId = getQueryParam("id");
+        
+
+        const button = document.getElementById('goToProfile');
+        button.addEventListener('click', () => {
+            if (userId) {
+                window.location.href = `profile.html?id=${userId}`;
+            } else {
+                alert('Veuillez entrer un ID valide !');
+            }
+        });
+
+        function redirectToFavorites() {
+            if (userId) {
+                window.location.href = `favorise.html?id=${userId}`;
+            } else {
+                alert("ID utilisateur introuvable !");
+            }
+        }
+
+        function gotodown() {
+            if (userId) {
+                window.location.href = `down.html?id=${userId}`;
+            } else {
+                alert("ID utilisateur introuvable !");
+            }
+        };
+        let allBooks = [];  // Variable pour stocker tous les livres récupérés
+
+
+// Fonction pour rechercher des livres
+function searchBooks() {
+    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+    
+    // Filtrer les livres en fonction de la recherche
+    const filteredBooks = allBooks.filter(book => {
+        // Vérification de l'existence des propriétés avant d'appliquer toLowerCase()
+        const title = book.titre ? book.titre.toLowerCase() : '';  // Si book.titre est undefined, mettre une chaîne vide
+        const author = book.author ? book.author.toLowerCase() : '';  // Idem pour book.auteur
+        
+        return title.includes(searchQuery) || author.includes(searchQuery);
+    });
+
+    // Afficher les résultats filtrés
+    displayBooks(filteredBooks);
+}
+
+
+// Fonction pour afficher les livres (en passant les livres filtrés ou non)
+function displayBooks(books) {
+    const bookList = document.getElementById('book-list');
+    bookList.innerHTML = '';  // Effacer la liste précédente
+
+    if (books.length > 0) {
+        books.forEach(book => {
+            const bookDiv = document.createElement('div');
+            bookDiv.className = 'book';
+            bookDiv.innerHTML = `
+                <img src="${book.image}" alt="Image du livre">
+                <div class="book-details">
+                    <h3>${book.titre}</h3>
+                    <p>${book.description}</p>
+                </div>
+                <a class="read-btn" onclick="window.location.href='read.html?id=${book.id}&id1=${userId}'">Lire</a>
+            `;
+            bookList.appendChild(bookDiv);
+        });
+    } else {
+        bookList.innerHTML = '<p>Aucun livre trouvé.</p>';
+    }
+}
+
+
+fetch('http://localhost:3000/stories')
+    .then(response => response.json())
+    .then(data => {
+        allBooks = data;  // Sauvegarder les livres dans la variable allBooks
+        displayBooks(allBooks);  // Afficher les livres à l'origine
+    })
+    .catch(error => {
+        console.error('Erreur lors de la récupération des livres:', error);
+    });
+
+    </script><pre>
+
+
+
+
+    </pre>
+    <footer>
+        <div class="footer_main">
+
+            <div class="tag">
+                <img src="images/logoo.png">
+                <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Est quaerat ipsa aspernatur ad 
+                    sequi, dolore eveniet vitae quasi. Excepturi ipsa odio impedit sequi at hic velit, minus 
+                    vero sint. Voluptas?
+                </p>
+
+            </div>
+
+            <div class="tag">
+                <h1>Quick Link</h1>
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Featured</a>
+                <a href="#">Arrivals</a>
+                <a href="#">Reviews</a>
+                <a href="#">Blog</a>
+                
+            </div>
+
+            <div class="tag">
+                <h1>Contact Info</h1>
+                <a href="#"><i class="fa-solid fa-phone"></i>+94 12 345 6789</a>
+                <a href="#"><i class="fa-solid fa-phone"></i>+94 32 444 699</a>
+                <a href="#"><i class="fa-solid fa-envelope"></i>bookstore123@gmail.com</a>
+                
+            </div>
+
+            <div class="tag">
+                <h1>Follow Us</h1>
+                <div class="social_link">
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                    <i class="fa-brands fa-twitter"></i>
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </div>
+                
+            </div>
+
+            <div class="tag">
+                <h1>Newsletter</h1>
+                <div class="search_bar">
+                    <input type="text" placeholder="You email id here">
+                    <button type="submit">Subscribe</button>
+                </div>                
+            </div>            
+            
+        </div>
+
+        <p class="end">Design By<span><i class="fa-solid fa-face-grin"></i> Oumaima and israe</span></p>
+
+    </footer>
+
+</body>
+</html>

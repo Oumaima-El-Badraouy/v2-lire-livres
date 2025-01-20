@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Utilisateur</title>
+  <style>
+    body {
+      font-family:'Playfair Display', serif;
+      background-color: #f9cca8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .profile-container {
+      background-color: #df9408;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+      width: 400px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .profile-container img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    .profile-container h1 {
+      font-size: 24px;
+      color: #ede4e4;
+      margin-bottom: 10px;
+    }
+
+    .profile-container p {
+      font-size: 16px;
+      color: #c49b9b;
+      margin: 5px 0;
+    }
+
+    .profile-container button {
+      background-color: #af864c56;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    .profile-container button:hover {
+      background-color: #45a049;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+</head>
+<body>
+  
+  <div class="profile-container">
+    <img src="images/icone.png" alt="Photo de profil utilisateur" id="user-image">
+    <h1 id="name">Nom: Chargement...</h1>
+    <h1 id="email">Email: Chargement...</h1>
+    <p class="error-message" id="error-message" style="display: none;"></p>
+    
+  </div>
+
+  <script>
+    // Récupérer l'id de la personne depuis l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const personId = urlParams.get('id');
+
+    if (personId) {
+      // Effectuer un appel à l'API pour récupérer les informations de la personne
+      fetch(`http://localhost:3000/person/${personId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            // Si un message d'erreur est renvoyé (ex: personne non trouvée)
+            document.getElementById('error-message').textContent = data.message;
+            document.getElementById('error-message').style.display = 'block';
+          } else {
+            // Afficher les informations de la personne
+            document.getElementById('name').textContent = `Nom: ${data.username}`;
+            document.getElementById('email').textContent = `Email: ${data.email}`;
+            // Si l'utilisateur a une image, l'afficher
+            
+          }
+        })
+        .catch(error => {
+          console.error('Erreur:', error);
+          document.getElementById('error-message').textContent = 'Une erreur est survenue lors de la récupération des données.';
+          document.getElementById('error-message').style.display = 'block';
+        });
+    } else {
+      document.getElementById('error-message').textContent = 'Aucun ID spécifié dans l\'URL.';
+      document.getElementById('error-message').style.display = 'block';
+    }
+
+    
+  </script>
+</body>
+</html>

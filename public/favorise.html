@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes Favoris</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Pour les icônes -->
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <!-- Menu horizontal -->
+  <div class="navbar bg-transparent px-12 py-4 flex justify-between items-center sticky top-0 z-50">
+    <button onclick="window.history.back()" class="text-orange-600 text-2xl focus:outline-none">
+      <i class="fas fa-arrow-circle-left"></i> <!-- Flèche avec un cercle -->
+    </button>
+  </div>
+
+  <!-- Titre de la page -->
+  <h1 class="text-4xl font-bold text-orange-800 text-center uppercase mt-8 tracking-wide">
+    <img src="images/logoo.png" alt="Logo" class="inline-block w-16 mr-2"> Mes Favoris
+  </h1>
+  
+  <!-- Conteneur des favoris -->
+  <div id="favorites" class="flex flex-col items-center gap-4 py-8 px-4"></div>
+
+  <script>
+    // Fonction pour extraire l'ID utilisateur depuis l'URL
+    function getUserIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    // Fonction pour charger les livres favoris
+    function loadFavorites() {
+      const userId = getUserIdFromUrl();
+
+      if (!userId) {
+        document.getElementById('favorites').innerText = "ID utilisateur manquant dans l'URL.";
+        return;
+      }
+
+      // Requête GET pour récupérer les favoris
+      fetch(`http://localhost:3000/favorites/${userId}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des favoris.');
+          }
+          return response.json();
+        })
+        .then(data => {
+          const favoritesContainer = document.getElementById('favorites');
+          favoritesContainer.innerHTML = ''; // Nettoyer le conteneur
+
+          if (data.length === 0) {
+            favoritesContainer.innerText = 'Aucun favori trouvé.';
+            return;
+          }
+
+          // Ajouter chaque livre favori au conteneur
+          data.forEach(book => {
+            const bookDiv = document.createElement('div');
+            bookDiv.className = 'book flex items-center w-full max-w-md border border-orange-400 rounded-lg shadow-md hover:shadow-lg transition-shadow bg-white';
+            bookDiv.innerHTML = `
+              <img src="${book.image || 'placeholder.jpg'}" alt="Image de ${book.titre}" class="w-24 h-36 object-cover rounded-l-lg">
+              <div class="book-content p-4 flex-grow">
+                <h3 class="text-lg font-semibold text-orange-800">${book.titre}</h3>
+                <p class="text-sm text-gray-600">Auteur : ${book.author}</p>
+                <a class="read-btn inline-block mt-3 px-4 py-2 bg-orange-800 text-white text-sm rounded hover:bg-orange-700" href="read.html?id=${book.id}&id1=${userId}">Lire</a>
+              </div>
+            `;
+            favoritesContainer.appendChild(bookDiv);
+          });
+        })
+        .catch(error => {
+          console.error(error);
+          document.getElementById('favorites').innerText = "Une erreur s'est produite.";
+        });
+    }
+
+    // Charger les favoris au chargement de la page
+    window.onload = loadFavorites;
+
+    function redirectToHome() {
+      const userId = getUserIdFromUrl(); // Récupérer l'ID de l'utilisateur
+      if (userId) {
+        window.location.href = `index.html?id1=${userId}`; // Rediriger vers la page Home avec l'ID
+      } else {
+        alert("ID utilisateur manquant.");
+      }
+    }
+  </script>
+
+</body>
+</html>

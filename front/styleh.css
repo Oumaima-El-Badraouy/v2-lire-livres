@@ -1,0 +1,154 @@
+/* Global Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9fafb;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh; /* S'assure que le corps occupe toute la hauteur de la fenêtre */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    background-color: #2575fc;
+    color: white;
+    text-align: center;
+    padding: 4rem 1rem; /* Augmenté pour plus de visibilité */
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1.2rem;
+    margin-top: 0;
+}
+
+/* Main section */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem; /* Augmenté pour plus de confort */
+    flex: 1; /* Permet à la section principale de prendre tout l'espace restant */
+}
+
+/* Signup container */
+.signup-container {
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.signup-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: #2575fc;
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Input Group */
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #2575fc;
+    outline: none;
+}
+
+/* Submit Button */
+button[type="submit"] {
+    padding: 1rem;
+    background-color: #2575fc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #1b5bbf;
+    transform: translateY(-2px); /* Légère élévation pour effet */
+}
+
+/* Links */
+a {
+    color: #2575fc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Footer styles (optional) */
+footer {
+    text-align: center;
+    background-color: #2575fc;
+    color: white;
+    padding: 1rem 0;
+    margin-top: 2rem;
+    /* Force le footer en bas */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.2rem;
+    }
+
+    .signup-container {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    .signup-container h2 {
+        font-size: 1.8rem;
+    }
+
+    button[type="submit"] {
+        font-size: 1rem;
+    }
+}
